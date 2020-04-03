@@ -19,6 +19,7 @@ class settlement:
     # Settlement Stats
     # Settlement VIPs
     # Settlement Units
+    # Damage
 
 # Nation Object
 class nation:
