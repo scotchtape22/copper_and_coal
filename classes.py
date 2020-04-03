@@ -21,6 +21,16 @@ class settlement:
     # Settlement Units
 
 # Nation Object
+class nation:
+  def __init__(self):
+    # Reference ID
+    # Player and token?
+    # Coal Limit
+    # Brass Limit
+    # Score
+    # Intelligence on other players
+    # Priority Number
+    
 
 # Manuever Object
 
