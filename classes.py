@@ -32,6 +32,17 @@ class nation:
     # Priority Number
     
 
+# VIP List
+class vip:
+  def __init__(self):
+    # VIP IP
+    # VIP Name
+    # VIP Status
+    # VIP Class
+    # VIP Nationality
+    # Grid Location
+
+
 # Manuever Object
 
 # Map Object
@@ -43,3 +54,4 @@ class nation:
 # Other Functions
 # Prioritization and Combat
 # Path Finding
+# Purifier Ejection
