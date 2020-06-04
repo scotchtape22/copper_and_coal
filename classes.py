@@ -18,17 +18,17 @@ class grid_hex:
     self.capital = is_capital
     # Settlement infrastructure
     self.infra = infra
-    # Automaton Counts (8 different Nations)
-    self.n1a = n1a
-    self.n2a = n2a
-    self.n3a = n3a
-    self.n4a = n4a
-    self.n5a = n5a
-    self.n6a = n6a
-    self.n7a = n7a
-    self.n8a = n8a
+    # Automaton Counts (8 different Nations) stored as an array
+    self.auto_count = auto_count
     #Calamity
     self.calamity = calamity
+    
+    def auto_growth(self)
+    for x in auto_count:
+      if x == 1:
+        x = x + 1
+      elif x >= 2:
+        x = x + 2
 
 # Nation Object
 class nation:
