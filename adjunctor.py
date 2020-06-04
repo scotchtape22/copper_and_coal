@@ -4,23 +4,27 @@
 # Returns a new save file
 # Will ideally be used with the draw functions to create the map
 
-# Spy Phase
-# Policy Changes
-# Purifier Ejections
-# Spy Missions
+# Load Save File
+# Load Turn Actions
 
-# Power Phase
-# LoS Update
-# Defenses are Updated
-# Queue Production
-# Queue Trades
+# Either Process as Move Round of Trade Round
 
-# Maneuver Phase
-# Assign Priority Random Numbers to prevent ties
-# Surface Moves
-# Each step
+  # Process Movement of Automatons
 
-# Production Phase
-# Run for each settlement
+  # Process Combat for Automatons
 
-# Resolution Phase
+  # Process Coups
+
+  # Process Calamities
+
+  # Harvest Resources
+  
+# Trade Phase
+
+  # Process Trades
+
+  # Production Phase
+
+  # Confirm Bids
+
+  # Process Growth
