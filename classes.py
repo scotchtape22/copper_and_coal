@@ -49,7 +49,11 @@ class nation:
 # Contains date
 # Function List Based on Phases
 
-# Move Object
+# Move Function
+# Takes in move order and 2 settlements
+# Checks that move count is valid
+# checks that adjacency is valid
+# Performs move
 
 # Other Functions
 # Combat
