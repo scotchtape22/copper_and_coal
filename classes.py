@@ -8,51 +8,36 @@ class grid_hex:
   def __init__(self):
     # Grid ID
     # Adjacent Grid IDs
-    # Settlement is needed - attach object-otherwise null
-    
-# Settlement Object
-class settlement:
-  def __init__(self):
-    # Settlement Name
-    # Settlement Type
-    # Settlement Owner
-    # Settlement Stats
-    # Settlement VIPs
-    # Settlement Units
-    # Damage
+    # Settlement Same
+    # Resource Type
+    # Settlement is capital?
+    # Settlement infastructure
+    # Automaton Counts (8 different Nations)
 
 # Nation Object
 class nation:
   def __init__(self):
     # Reference ID
     # Player and token?
-    # Coal Limit
-    # Brass Limit
-    # Score
-    # Intelligence on other players
-    # Priority Number
-    
-
-# VIP List
-class vip:
-  def __init__(self):
-    # VIP IP
-    # VIP Name
-    # VIP Status
-    # VIP Class
-    # VIP Nationality
-    # Grid Location
-
-
-# Manuever Object
+    # Terraform Score
+    # Manufacture Bid
+    # Airship Bid
+    # Production Value
+    # Copper
+    # Coal
+    # Barley
+    # Automaton Count
 
 # Map Object
 # Contains all other objects
+# Contains date
 # Function List Based on Phases
 
-# Action Object
+# Move Object
 
 # Other Functions
-# Prioritization and Combat
-# Path Finding
-# Purifier Ejection
+# Combat
+  # Figure combat priority
+  # Remove 
+  
+# Calamity Role
