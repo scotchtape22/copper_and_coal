@@ -32,19 +32,19 @@ def chose_hex(cx,cy,names,box,a_nation):
 	if hex_type == "metro":
 		this_name,names = pick(names)
 		if a_nation:
-			this_hex = cncc.map_hex(cx,cy,hex_type,a_nation,this_name,15,25,0)
+			this_hex = cncc.map_hex(cx,cy,hex_type,a_nation,this_name,15,25,0,[])
 		else:
-			this_hex = cncc.map_hex(cx,cy,hex_type,None,this_name,0,25,25)
+			this_hex = cncc.map_hex(cx,cy,hex_type,None,this_name,0,25,25,[])
 	elif hex_type == "mine":
 		this_name,names = pick(names)
 		if a_nation:
-			this_hex = cncc.map_hex(cx,cy,hex_type,a_nation,this_name,5,25,250)
+			this_hex = cncc.map_hex(cx,cy,hex_type,a_nation,this_name,5,25,250,[])
 		else:
-			this_hex = cncc.map_hex(cx,cy,hex_type,None,this_name,0,25,250)
+			this_hex = cncc.map_hex(cx,cy,hex_type,None,this_name,0,25,250,[])
 	elif hex_type == "wilds":
-		this_hex = cncc.map_hex(cx,cy,hex_type,None,"Wilds",0,25,50)
+		this_hex = cncc.map_hex(cx,cy,hex_type,None,"Wilds",0,25,50,[])
 	elif hex_type == "wastes":
-		this_hex = cncc.map_hex(cx,cy,hex_type,None,"Wastelands",0,0,0)
+		this_hex = cncc.map_hex(cx,cy,hex_type,None,"Wastelands",0,0,0,[])
 
 	return this_hex,names,box
 
@@ -124,7 +124,7 @@ def quick_map():
 	this_map.append(this_hex)
 	#2-3, Nation 1 Capital
 	cap_name,all_names = pick(all_names)
-	this_map.append(cncc.map_hex(2,3,"metro",nations[0],cap_name,30,25,0))
+	this_map.append(cncc.map_hex(2,3,"metro",nations[0],cap_name,30,25,0,[]))
 	#2-4, Nation 1 outlier
 	this_hex,all_names,prov_1 = chose_hex(2,4,all_names,prov_1,nations[0])
 	this_map.append(this_hex)
@@ -152,7 +152,7 @@ def quick_map():
 	this_map.append(this_hex)
 	#3-5, Nation 2 capital
 	cap_name,all_names = pick(all_names)
-	this_map.append(cncc.map_hex(3,5,"metro",nations[1],cap_name,30,25,0))
+	this_map.append(cncc.map_hex(3,5,"metro",nations[1],cap_name,30,25,0,[]))
 	#3-6, Nation 2 outlier
 	this_hex,all_names,prov_2 = chose_hex(3,6,all_names,prov_2,nations[1])
 	this_map.append(this_hex)
@@ -212,7 +212,7 @@ def quick_map():
 	this_map.append(this_hex)
 	#6-3, Nation 3 Capital
 	cap_name,all_names = pick(all_names)
-	this_map.append(cncc.map_hex(6,3,"metro",nations[2],cap_name,30,25,0))
+	this_map.append(cncc.map_hex(6,3,"metro",nations[2],cap_name,30,25,0,[]))
 	#6-4, Nation 3 outlier
 	this_hex,all_names,prov_3 = chose_hex(6,4,all_names,prov_3,nations[2])
 	this_map.append(this_hex)
@@ -240,7 +240,7 @@ def quick_map():
 	this_map.append(this_hex)
 	#7-5, Nation 4 capital
 	cap_name,all_names = pick(all_names)
-	this_map.append(cncc.map_hex(7,5,"metro",nations[3],cap_name,30,25,0))
+	this_map.append(cncc.map_hex(7,5,"metro",nations[3],cap_name,30,25,0,[]))
 	#7-6, Nation 4 outlier
 	this_hex,all_names,prov_4 = chose_hex(7,6,all_names,prov_4,nations[3])
 	this_map.append(this_hex)
@@ -300,7 +300,7 @@ def quick_map():
 	this_map.append(this_hex)
 	#10-3, Nation 5 Capital
 	cap_name,all_names = pick(all_names)
-	this_map.append(cncc.map_hex(10,3,"metro",nations[4],cap_name,30,25,0))
+	this_map.append(cncc.map_hex(10,3,"metro",nations[4],cap_name,30,25,0,[]))
 	#10-4, Nation 5 outlier
 	this_hex,all_names,prov_5 = chose_hex(10,4,all_names,prov_5,nations[4])
 	this_map.append(this_hex)
@@ -328,7 +328,7 @@ def quick_map():
 	this_map.append(this_hex)
 	#11-5, Nation 6 capital
 	cap_name,all_names = pick(all_names)
-	this_map.append(cncc.map_hex(11,5,"metro",nations[5],cap_name,30,25,0))
+	this_map.append(cncc.map_hex(11,5,"metro",nations[5],cap_name,30,25,0,[]))
 	#11-6, Nation 6 outlier
 	this_hex,all_names,prov_6 = chose_hex(11,6,all_names,prov_6,nations[5])
 	this_map.append(this_hex)
@@ -388,7 +388,7 @@ def quick_map():
 	this_map.append(this_hex)
 	#14-3, Nation 7 Capital
 	cap_name,all_names = pick(all_names)
-	this_map.append(cncc.map_hex(14,3,"metro",nations[6],cap_name,30,25,0))
+	this_map.append(cncc.map_hex(14,3,"metro",nations[6],cap_name,30,25,0,[]))
 	#14-4, Nation 7 outlier
 	this_hex,all_names,prov_7 = chose_hex(14,4,all_names,prov_7,nations[6])
 	this_map.append(this_hex)
@@ -416,7 +416,7 @@ def quick_map():
 	this_map.append(this_hex)
 	#15-5, Nation 8 capital
 	cap_name,all_names = pick(all_names)
-	this_map.append(cncc.map_hex(15,5,"metro",nations[7],cap_name,30,25,0))
+	this_map.append(cncc.map_hex(15,5,"metro",nations[7],cap_name,30,25,0,[]))
 	#15-6, Nation 8 outlier
 	this_hex,all_names,prov_8 = chose_hex(15,6,all_names,prov_8,nations[7])
 	this_map.append(this_hex)

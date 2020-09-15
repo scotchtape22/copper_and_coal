@@ -27,10 +27,10 @@ def gamebar_buttons():
 	# Button Objects
 
 	gb_buttons = []
-	gb_buttons.append(cncc.a_button("","menu",None,[0,0,32,32],[0,0,0],[0,255,0],[255,0,0],[0,0,255],button_icon[0]))
-	gb_buttons.append(cncc.a_button("","intel",None,[32,0,32,32],[0,0,0],[0,255,0],[255,0,0],[0,0,255],button_icon[1]))
-	gb_buttons.append(cncc.a_button("","mssg",None,[64,0,32,32],[0,0,0],[0,255,0],[255,0,0],[0,0,255],button_icon[2]))
-	gb_buttons.append(cncc.a_button("","submit",None,[96,0,32,32],[0,0,0],[0,255,0],[255,0,0],[0,0,255],button_icon[3]))
+	gb_buttons.append(cncc.a_button("","menu",None,None,[0,0,32,32],[0,0,0],[0,255,0],[255,0,0],[0,0,255],button_icon[0]))
+	gb_buttons.append(cncc.a_button("","intel",None,None,[32,0,32,32],[0,0,0],[0,255,0],[255,0,0],[0,0,255],button_icon[1]))
+	gb_buttons.append(cncc.a_button("","mssg",None,None,[64,0,32,32],[0,0,0],[0,255,0],[255,0,0],[0,0,255],button_icon[2]))
+	gb_buttons.append(cncc.a_button("","submit",None,None,[96,0,32,32],[0,0,0],[0,255,0],[255,0,0],[0,0,255],button_icon[3]))
 
 	return gb_buttons
 
@@ -42,8 +42,8 @@ def hex_buttons():
 	text_prompt_color = cncc.get_color("active_text")
 
 	unit_buttons = []
-	unit_buttons.append(cncc.a_button("Support","support",button_font,[0,160,128,32],button_color,text_color,button_prompt_color,text_prompt_color))
-	unit_buttons.append(cncc.a_button("Disband","disband",button_font,[128,160,128,32],button_color,text_color,button_prompt_color,text_prompt_color))
+	unit_buttons.append(cncc.a_button("Support","support",None,button_font,[0,160,128,32],button_color,text_color,button_prompt_color,text_prompt_color))
+	unit_buttons.append(cncc.a_button("Disband","disband",None,button_font,[128,160,128,32],button_color,text_color,button_prompt_color,text_prompt_color))
 	return unit_buttons
 
 def draw_gamebar(gamebar_buttons,screen,my_nation,my_world,display_width):
@@ -204,11 +204,16 @@ def draw_hex(my_hex,gameDisplay,shadow):
 			NameSurf,NameRect = cncc.text_objects(str(my_hex.av_coal),data_font)
 			NameRect.center = (my_hex.pos_x+my_hex.hex_width-16,my_hex.pos_y+my_hex.hex_height-32)
 			gameDisplay.blit(NameSurf,NameRect)
+			# War Machines
+			NameSurf,NameRect = cncc.text_objects(str(len(my_hex.wm)),data_font)
+			NameRect.center = (my_hex.pos_x+16,my_hex.pos_y+my_hex.hex_height-64)
+			gameDisplay.blit(NameSurf,NameRect)
 		elif my_hex.infolevel == 1:
 			# See total stuff
-			total_stuff = my_hex.autos+my_hex.av_coal
+			total_stuff = my_hex.autos+my_hex.av_coal+(len(my_hex.wm)*25)
 			NameSurf,NameRect = cncc.text_objects(str(total_stuff),data_font)
 			NameRect.center = (my_hex.pos_x+16,my_hex.pos_y+my_hex.hex_height-32)
+			gameDisplay.blit(NameSurf,NameRect)
 		elif my_hex.infolevel == 0:
 			gameDisplay.blit(shadow,[c_x,c_y])
 	# See nothing from info level 0 hexes
@@ -220,9 +225,16 @@ def draw_hex(my_hex,gameDisplay,shadow):
 	# cord_text = (str(my_hex.row)+"-"+str(my_hex.col))
 	# CordSurf,CordRect = cncc.text_objects(cord_text,name_font)
 	# CordRect.center = (c_x+48,(c_y+80))
-	# gameDisplay.blit(CordSurf,CordRect) 
+	# gameDisplay.blit(CordSurf,CordRect)
 
-def draw_hex_popup(screen,my_hex):
+def make_hex_icons():
+	# Return array of icons for hex buttons
+	icon_array = []
+	icon_array.append(pygame.image.load('./images/buttons/button-produce.png'))
+	return icon_array
+
+
+def draw_hex_popup(screen,my_hex,hex_icons):
 	# Draw information on this hex
 	insert_dem = [0,32,384,384]
 	co_splash = [255,255,153]
@@ -234,6 +246,7 @@ def draw_hex_popup(screen,my_hex):
 	title_font = pygame.font.Font('./fonts/steam_punk_flyer.ttf',24)
 	detail_font = pygame.font.Font('./fonts/steam_punk_flyer.ttf',12)
 	cncc.draw_notice(screen,my_hex.name,title_font,[0,64,300,30],co_splash,[0,0,0])
+
 	if my_hex.controller != None:
 		cncc.draw_notice(screen,my_hex.controller.playername,detail_font,[0,96,150,30],co_splash,[0,0,0])
 	else:
@@ -258,6 +271,7 @@ def draw_hex_popup(screen,my_hex):
 		cncc.draw_notice(screen,"Total Automatons:"+str(my_hex.autos),detail_font,[0,160,150,30],co_splash,[0,0,0])
 		cncc.draw_notice(screen,"Available Coal:"+str(my_hex.av_coal),detail_font,[0,192,150,30],co_splash,[0,0,0])
 		cncc.draw_notice(screen,"Coal Reserve:"+str(my_hex.mine),detail_font,[0,224,150,30],co_splash,[0,0,0])
+		cncc.draw_notice(screen,"No directive for this quadrent yet.  Will conserve by default." ,detail_font,[0,192,150,30],co_splash,[0,0,0])
 	elif my_hex.infolevel == 1:
 		# See how much "stuff" is here
 		cncc.draw_notice(screen,"Total Material:"+str(my_hex.material),detail_font,[0,160,150,30],co_splash,[0,0,0])
@@ -267,15 +281,138 @@ def draw_hex_popup(screen,my_hex):
 	else:
 		cncc.draw_notice(screen,"Quit cheating!",detail_font,[0,160,150,30],co_splash,[0,0,0])
 
+	# Write the queued order if one exsists
 
 	# Debug info level
 	cncc.draw_notice(screen,"Info Level:"+str(my_hex.infolevel),detail_font,[0,256,150,30],co_splash,[0,0,0])
+	cncc.draw_notice(screen,"Cordinates:"+str(my_hex.row)+":"+str(my_hex.col)+":"+str(my_hex.sss),detail_font,[0,288,150,30],co_splash,[0,0,0])
 
 
-	# Draw buttons if you control this
-	# While techically you can assume this with info level 2, you
+	context_menu = []
 
-	# Return the button array so we know what is clickable?
+	if my_hex.hex_type == "wastes":
+		# No buttons
+		return context_menu
+	else:
+		context_menu.append(cncc.a_button("","conserve",None,None,[288,96,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+		context_menu.append(cncc.a_button("","defend",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+		if my_hex.mine > 0:
+			# If there is anything aviable, construct it
+			context_menu.append(cncc.a_button("","extract",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+		else:
+			# Just an empty button
+			pass
+		if my_hex.autos > 0:
+			# If there is anything aviable, construct it
+			context_menu.append(cncc.a_button("","build_autos",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+		else:
+			# Just an empty button
+			pass
+		if my_hex.hex_type == "metro":
+			if my_hex.av_coal >= 25:
+				context_menu.append(cncc.a_button("","build_airship",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+				context_menu.append(cncc.a_button("","build_landship",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+				context_menu.append(cncc.a_button("","build_extractor",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+				context_menu.append(cncc.a_button("","build_device",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+			else:
+				pass
+			if my_hex.av_coal >= 100:
+				context_menu.append(cncc.a_button("","build_component",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+			else:
+				pass
+			# Check if you have enough components 
+			comp_count = 0
+			for mech in my_hex.wm:
+				if mech == "component":
+					comp_count = comp_count + 1
+
+			if comp_count >= 3 and my_hex.av_coal >= 200:
+				context_menu.append(cncc.a_button("","launch",None,None,[288,288,64,64],[0,0,0],[0,255,0],[255,0,0],[0,0,255],hex_icons[0]))
+			else:
+				pass
+		return context_menu
+
+
+# TODO: Def Update Map
+# Update the map while the player is playing
+def update_map():
+	pass
+
+def main_menu(screen):
+	insert_dem = [0,32,128,160]
+	co_splash = [255,255,153]
+
+
+	button_font = pygame.font.Font('./fonts/steam_punk_flyer.ttf',16)
+	mainmenu_buttons = []
+	button_color = cncc.get_color("inactive_button")
+	text_color = cncc.get_color("inactive_text")
+	button_prompt_color = cncc.get_color("active_button")
+	text_prompt_color = cncc.get_color("active_text")
+
+
+
+	# Draw outside rectangle
+	pygame.draw.rect(screen,co_splash,insert_dem)
+
+	# Draw tile name
+
+	mainmenu_buttons.append(cncc.a_button("Change Game","load",None,button_font,[0,64,128,32],button_color,text_color,button_prompt_color,text_prompt_color))
+	mainmenu_buttons.append(cncc.a_button("Options","opt",None,button_font,[0,96,128,32],button_color,text_color,button_prompt_color,text_prompt_color))
+	mainmenu_buttons.append(cncc.a_button("Quit","quit",None,button_font,[0,128,128,32],button_color,text_color,button_prompt_color,text_prompt_color))
+	return mainmenu_buttons
+
+	# Draws the menu, returns buttons in array
+
+def intel_menu(screen,my_nation,all_nations):
+	insert_dem = [0,32,300,704]
+	# Should change based on player count
+	co_splash = [255,255,153]
+
+	# Button info:
+	button_color = cncc.get_color("inactive_button")
+	text_color = cncc.get_color("inactive_text")
+	button_prompt_color = cncc.get_color("active_button")
+	text_prompt_color = cncc.get_color("active_text")
+
+	# Draw outside rectangle
+	pygame.draw.rect(screen,co_splash,insert_dem)
+	menu_buttons = []
+
+	# Draw tile name
+	title_font = pygame.font.Font('./fonts/steam_punk_flyer.ttf',24)
+	detail_font = pygame.font.Font('./fonts/steam_punk_flyer.ttf',12)
+	cncc.draw_notice(screen,"Intelligence Report",title_font,[0,64,300,30],co_splash,[0,0,0])
+
+	# Your nations status
+	cncc.draw_notice(screen,"My Components:"+str(my_nation.score),detail_font,[0,128,300,30],co_splash,[0,0,0])
+	cncc.draw_notice(screen,"Spies Available",detail_font,[0,160,300,30],co_splash,[0,0,0])
+
+	cursor_x = 192
+	# All other nations
+	for this_nation in all_nations:
+		# No need to draw your own nation
+		if this_nation.playername == my_nation.playername:
+			continue
+		cncc.draw_notice(screen,this_nation.playername+" Components:"+str(this_nation.score),detail_font,[0,cursor_x,300,30],co_splash,[0,0,0])
+		cursor_x = cursor_x+32
+		menu_buttons.append(cncc.a_button("Coup","coup",this_nation,detail_font,[0,cursor_x,99,30],button_color,text_color,button_prompt_color,text_prompt_color))
+		menu_buttons.append(cncc.a_button("Observe","observe",this_nation,detail_font,[100,cursor_x,99,30],button_color,text_color,button_prompt_color,text_prompt_color))
+		menu_buttons.append(cncc.a_button("Counter","counter",this_nation,detail_font,[200,cursor_x,99,30],button_color,text_color,button_prompt_color,text_prompt_color))
+		cursor_x = cursor_x+32
+
+	# print(cursor_x)
+	# cncc.draw_notice(screen,"Reset Spies",detail_font,[0,cursor_x,300,30],co_splash,[0,0,0])
+	menu_buttons.append(cncc.a_button("Reset Spies","spy_reset",None,detail_font,[0,cursor_x,300,30],button_color,text_color,button_prompt_color,text_prompt_color))
+
+	return menu_buttons
+
+def mssg_menu():
+	pass
+
+def const_menu():
+	pass
+	# Menu construction
 	
 #############
 # The 2 calls that should be coming from outside the game
@@ -293,35 +430,6 @@ def test_map():
 
 	gameDisplay = pygame.display.set_mode([display_width,display_height])
 
-
-
-################# For a test
-################# can use quick map if you want
-	# Create test map
-	# this_map = []
-
-	# rows = 7
-	# columns = 16
-
-	# while rows > 0:
-	# 	these_columns = columns
-	# 	while these_columns > 0:
-	# 		this_map.append(cncc.map_hex(these_columns,rows,"sky","no man","Open Skies"))
-	# 		these_columns = these_columns - 1
-	# 	rows = rows - 1
-
-
-	# # Create a fake nation
-
-	# my_nation = cncc.your_nation("God",'./images/sigils/sigil_god.png',20,20,20,20,20,20,20,20,20,20,0)
-
-	# # Create a fake world
-	# # Define a temporary "due date"
-	# d1 = datetime.datetime.now() + datetime.timedelta(minutes=15)
-	# my_world = cncc.world("Spring",1,"clear",d1)
-
-################# End test
-
 	nations,this_map,my_world,row_d = cnc_mm.quick_map()
 
 	my_nation = nations[0]
@@ -336,6 +444,7 @@ def test_map():
 
 	# TODO - grab the actual number of columns, will need to figure out how to grab from the map
 	
+	# TODO - Load buttons
 
 	# Define FPS Clock
 	clock_1 = pygame.time.Clock()
@@ -343,21 +452,25 @@ def test_map():
 
 	# Get buttons for the icons for game bar
 	gb_buttons = gamebar_buttons()
+	hex_buttons = make_hex_icons()
 
 	# Set initial click variable
 	click_select = None
+	context_menu = []
 
 
 	# first_draw_map
 	first_draw_map(this_map,0,0,display_width,display_height)
 
 	# Get fog or war
-	this_map = cncc.fog_o_war(this_map,my_nation)
+	# Will need to run this when the map updates
+	this_map = cncc.fog_o_war(this_map,my_nation,row_d)
 
 	# Begin the loop!
 	playing = True
 
 	while playing:
+		# Check if map needs updating
 		for event in pygame.event.get():
 			# Exit Event
 			if event.type == pygame.QUIT:
@@ -378,7 +491,16 @@ def test_map():
 							nada = False
 					# 		my_button.function
 					if nada == False:
-						break							
+						break
+					# Context button
+					for my_button in context_menu:
+						if my_button.but_rect.collidepoint(x,y):
+							# print(my_button.button_id)
+							# Generally shouldn't change the click select
+							nada = False
+					# 		my_button.function
+					if nada == False:
+						break									
 					for my_hex in this_map:
 						# Bange together an actual rect becasuse fuck it
 						if my_hex.hex_rect.collidepoint(x,y):
@@ -393,6 +515,7 @@ def test_map():
 					# If nothing was selected, back up?
 					if nada:
 						click_select = None
+						context_menu = []
 
 
 
@@ -418,7 +541,7 @@ def test_map():
 
 
 		# Draw
-		# 1 - Background - Ocean
+		# 1 - Background - Orange
 		gameDisplay.fill(cncc.get_color("bg"))
 
 
@@ -434,7 +557,7 @@ def test_map():
 				# Hilight selected hex
 				gameDisplay.blit(hilight,[click_select.pos_x,click_select.pos_y])
 
-		# 3 - Draw units
+
 		# 4 - If you have a that has potential targets?
 
 		# 4 - Toolbar
@@ -449,15 +572,21 @@ def test_map():
 		if click_select:
 			if isinstance(click_select,cncc.map_hex):
 				# OR IF A BUTTON WITHIN THE HEX POPUP IS CLICKED!
-				draw_hex_popup(gameDisplay,click_select)
+				context_menu = draw_hex_popup(gameDisplay,click_select,hex_buttons)
 				# Hilight selected hex
 				gameDisplay.blit(hilight,[click_select.pos_x,click_select.pos_y])
 			elif isinstance(click_select,cncc.a_button):
-				pass
+				if click_select.button_id == "menu":
+					context_menu = main_menu(gameDisplay)
+				elif click_select.button_id == "intel":
+					context_menu = intel_menu(gameDisplay,my_nation,nations)
 				# Button Functions go here?
 
+		# 6 - Draw buttons from click select
+		for button in context_menu:
+			button.draw(gameDisplay)
 
-		# 6 - Update 
+		# 7 - Update 
 		pygame.display.update()
 
 		clock_1.tick(90)

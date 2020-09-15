@@ -4,7 +4,7 @@
 import pygame
 
 class map_hex():
-	def __init__(self,x,y,h_type,player,name,automatons,available,mine):
+	def __init__(self,x,y,h_type,player,name,automatons,available,mine,wm):
 		self.row = x 
 		self.col = y
 		# Used for cubic maths
@@ -43,6 +43,11 @@ class map_hex():
 		self.mine = mine
 		self.material = automatons+available
 
+		# War Machines
+		self.wm = []
+
+		self.command = None
+
 		# Tile info level based on ownership - used to define
 		self.infolevel = 2
 
@@ -56,12 +61,14 @@ class a_button:
 	# Initilization 
 	# Draw function
 	# Button Identifier - lets you perform a function based on button presses
-	def __init__(self,message,button_id,font,button_dem,sq_co=[255,255,255],tx_co=[0,0,0],sq_p_co=[255,255,255],tx_p_co=[0,0,0],img_file=None):
+	def __init__(self,message,button_id,data,font,button_dem,sq_co=[255,255,255],tx_co=[0,0,0],sq_p_co=[255,255,255],tx_p_co=[0,0,0],img_file=None):
 		
 		self.message = message
+		# TODO: Button_id can perhaps just be a function that can run
 		self.button_id = button_id
 		self.font = font
 		self.button_dem = button_dem
+		self.data = data
 		self.sq_co = sq_co
 		self.tx_co = tx_co
 		self.sq_p_co = sq_p_co
@@ -189,6 +196,10 @@ def get_color(color):
 		return [255,255,179] 
 	elif color == "active_text":
 		return [230,230,0]
+	elif color == "selected_button":
+		return [240,240,0]
+	elif color == "selected_text":
+		return [163,112,61]
 	elif color == "gamebar":
 		return [255,255,204]
 	elif color == "white":
@@ -199,7 +210,7 @@ def get_color(color):
 		return [0,255,0]
 	# Else should return lime green to show an error
 
-def fog_o_war(this_map,my_nation):
+def fog_o_war(this_map,my_nation,row_d):
 	# Returns a new map with the appropriate information levels
 	# Only run after orders occur
 	my_hexes = []
@@ -219,14 +230,16 @@ def fog_o_war(this_map,my_nation):
 			continue
 		else:
 			for near_hex in my_hexes:
-				if is_adjacent(near_hex,other_hex):
+				if is_adjacent(near_hex,other_hex,row_d):
 					other_hex.infolevel = 1
 					break
 
 	return this_map
 
 
-def is_adjacent(hex_1,hex_2):
+def is_adjacent(hex_1,hex_2,row_d):
+	row_c = row_d/hex_1.hex_width
+	row_c = int(row_c)
 	# Returns True or Fase depending on if 2 hexes are adjacent
 	if hex_1.row+1 == hex_2.row and hex_1.col -1 == hex_2.col and hex_1.sss == hex_2.sss:
 		return True
@@ -241,6 +254,35 @@ def is_adjacent(hex_1,hex_2):
 	elif hex_1.row == hex_2.row and hex_1.col-1 == hex_2.col and hex_1.sss+1 == hex_2.sss:
 		return True
 	# Determine world wrap
+	elif (hex_1.row == 1 and hex_2.row == row_c) or (hex_2.row == 1 and hex_1.row == row_c):
+		# if both are on the side of the world, start to look at other data
+		# TODO: Fix the math if need be and test
+		if hex_1.col == hex_2.col:
+			return True
+		elif hex_1.col + 1 == hex_2.col and (hex_1.sss-hex_2.sss)+1 == row_c:
+			return True
+		elif hex_1.col - 1 == hex_2.col and (hex_1.sss-hex_2.sss)-1 == row_c:
+			return True
+		elif hex_1.col + 1 == hex_2.col and (hex_1.sss-hex_2.sss) == row_c:
+			return True
+		elif hex_1.col - 1 == hex_2.col and (hex_1.sss-hex_2.sss) == row_c:
+			return True
+		elif hex_2.col + 1 == hex_1.col and (hex_2.sss-hex_1.sss)+1 == row_c:
+			return True
+		elif hex_2.col - 1 == hex_1.col and (hex_2.sss-hex_1.sss)-1 == row_c:
+			return True
+		elif hex_2.col + 1 == hex_1.col and (hex_2.sss-hex_1.sss) == row_c:
+			return True
+		elif hex_2.col - 1 == hex_1.col and (hex_2.sss-hex_1.sss) == row_c:
+			return True
+	return False
+
+def range_two(hex_1,hex_2,my_map):
+	# Return true if both hexes share an adjacent hex
+	for transit_hex in my_map:
+		if is_adjacent(hex_1,transit_hex) and is_adjacent(hex_2,transit_hex):
+			return True
+
 	return False
 
 def game_quit():
